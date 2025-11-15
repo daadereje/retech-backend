@@ -1,16 +1,15 @@
-const http = require('http');
+const express = require("express");
+const app = express();
+const connectDB = require("./config/db");
 
-const server = http.createServer((req, res) => {
-  if (req.url === '/') {
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('Welcome to ReTech Backend - Basic Node Server!');
-  } else if (req.url === '/about') {
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('This is the About page!');
-  } else {
-    res.writeHead(404, { 'Content-Type': 'text/plain' });
-    res.end('Page not found');
-  }
+connectDB();
+app.use(express.json());
+
+app.get("/", (req, res) => {
+    res.send("ReTech API is running...");
 });
 
-server.listen(4000, () => console.log('Server running on http://localhost:4000'));
+app.use("/api/repairs", require("./routes/repairs"));
+
+const PORT = 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
